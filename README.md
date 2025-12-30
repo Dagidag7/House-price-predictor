@@ -1,12 +1,12 @@
-# 🏠 California House Price Predictor
+# 🏠 House Price Predictor
 
-A complete end-to-end machine learning project that predicts house prices in California using XGBoost. The project includes:
+A complete end-to-end machine learning project that predicts house prices using XGBoost. The project includes:
 
 - 📊 Exploratory Data Analysis (EDA) and feature engineering  
 - 🧠 Model training & tuning with GridSearchCV  
 - ⚙️ Backend API using FastAPI  
 - 🎨 Frontend interface with Streamlit  
-- ☁️ Deployed to [Streamlit Cloud](https://california-house-price-predictor-azzhpixhrzfjpvhnn4tfrg.streamlit.app/)
+
 
 ---
 
@@ -32,8 +32,8 @@ house-price-predictor/
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/leventtcaan/california-house-price-predictor.git
-cd california-house-price-predictor
+git clone https://https://github.com/Dagidag7/House_price_predictor.gits
+cd House-price-predictor
 ```
 
 2. **Install the dependencies:**
@@ -57,15 +57,9 @@ streamlit run app.py
 - Input validations and explanations (e.g., `median_income` is scaled ×1000)  
 - Visual UI with Streamlit (map, sidebar, form, prediction card)  
 - GridSearchCV used to optimize model hyperparameters  
-- Fully deployed app on Streamlit Cloud
 
 ---
 
-## 🔗 Live Demo
-
-👉 [Try the live app here!](https://california-house-price-predictor-azzhpixhrzfjpvhnn4tfrg.streamlit.app/)
-
----
 
 ## 📊 Model Performance
 
@@ -73,7 +67,7 @@ streamlit run app.py
 - **R² Score:** 0.84  
 - **RMSE:** ~46,680  
 - Parameters tuned using `GridSearchCV`  
-- Evaluated against multiple regression algorithms (Linear, RF, DT, GBM)
+- Evaluated against multiple regression algorithms (Linear, RF, GBM)
 
 ---
 
@@ -90,17 +84,4 @@ streamlit run app.py
 
 ## 🤝 Contributions
 
-This project is open for feedback, improvement, and collaboration. Feel free to fork, star, and open issues or PRs!
-
----
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 📌 Note (Türkçe)
-
-Bu proje, Kaliforniya'daki ev fiyatlarını tahmin eden bir makine öğrenimi modeli ve Streamlit arayüzü içermektedir. Daha fazla bilgi için yukarıdaki İngilizce açıklamalara göz atabilirsiniz.
-
+This project is open for feedback, improvement, and collaboration. 

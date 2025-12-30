@@ -1,0 +1,9 @@
+{
+    "model_name": "XGBoost Regressor (Tuned)",
+    "version": "1.0",
+    "training_date": "2025-12-29",
+    "r2_score": 0.84,
+    "rmse": 46680.71,
+    "features": ["longitude", "latitude"],
+    "hyperparameters": {}
+  }

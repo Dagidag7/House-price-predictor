@@ -1,0 +1,7 @@
+{
+  "best_model": "XGBoost Regressor (Tuned)",
+  "r2_score": 0.8473907581586055,
+  "rmse": 45371.90450208818,
+  "hyperparameters": {},
+  "test_samples": 4127
+}
