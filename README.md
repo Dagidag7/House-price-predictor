@@ -32,7 +32,7 @@ house-price-predictor/
 1. **Clone the repository:**
 
 ```bash
-git clone https://https://github.com/Dagidag7/House_price_predictor.gits
+git clone https://https://github.com/Dagidag7/House-price-predictor.gits
 cd House-price-predictor
 ```
 
@@ -83,5 +83,6 @@ streamlit run app.py
 ---
 
 ## 🤝 Contributions
+
 
 This project is open for feedback, improvement, and collaboration. 
