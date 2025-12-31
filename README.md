@@ -14,15 +14,23 @@ A complete end-to-end machine learning project that predicts house prices using 
 
 ```
 house-price-predictor/
-├── backend/               # Model training, evaluation, and preprocessing code
+├── app/                   # Application files
+│   ├── app.py             # Streamlit main app
+│   └── main.py            # FastAPI backend for prediction
 ├── data/                  # Raw and processed datasets
-├── frontend/              # Streamlit UI (optional split)
-├── model/                 # Serialized ML models
-├── app.py                 # Streamlit main app
-├── main.py                # FastAPI backend for prediction
-├── eda.ipynb              # Jupyter notebook for EDA & feature engineering
+│   ├── raw/               # Original data
+│   └── processed/         # Preprocessed data
+├── models/                # Serialized ML models
+│   ├── xgboost_model.pkl  # Final trained model (XGBoost)
+│   └── model_metadata.json
+├── notebooks/             # Jupyter notebooks
+│   ├── 01_eda.ipynb       # Exploratory Data Analysis
+│   ├── 02_preprocessing.ipynb
+│   ├── 03_modeling.ipynb
+│   └── 04_evaluation.ipynb
+├── reports/               # Evaluation results and reports
 ├── requirements.txt       # Required Python packages
-└── xgboost_model.pkl      # Final trained model (XGBoost)
+└── README.md
 ```
 
 ---
@@ -32,7 +40,7 @@ house-price-predictor/
 1. **Clone the repository:**
 
 ```bash
-git clone https://https://github.com/Dagidag7/House_price_predictor.gits
+git clone https://github.com/Dagidag7/House_price_predictor.git
 cd House-price-predictor
 ```
 
@@ -45,6 +53,12 @@ pip install -r requirements.txt
 3. **Run the Streamlit app:**
 
 ```bash
+streamlit run app/app.py
+```
+
+Or navigate to the app directory first:
+```bash
+cd app
 streamlit run app.py
 ```
 
@@ -53,21 +67,24 @@ streamlit run app.py
 ## 🌟 Features
 
 - Real-time house price prediction based on user input  
-- Feature importance chart (XGBoost built-in)  
+- Automatic feature engineering (calculates 25 features from 8 user inputs)  
 - Input validations and explanations (e.g., `median_income` is scaled ×1000)  
-- Visual UI with Streamlit (map, sidebar, form, prediction card)  
+- User-friendly Streamlit interface with prediction history  
 - GridSearchCV used to optimize model hyperparameters  
+- Feature importance analysis available in evaluation notebook  
 
 ---
 
 
 ## 📊 Model Performance
 
-- **Best Model:** XGBoost Regressor  
-- **R² Score:** 0.84  
-- **RMSE:** ~46,680  
-- Parameters tuned using `GridSearchCV`  
-- Evaluated against multiple regression algorithms (Linear, RF, GBM)
+- **Best Model:** XGBoost Regressor (Tuned with GridSearchCV)  
+- **R² Score:** 0.847 (84.7% variance explained)  
+- **RMSE:** $45,371.90  
+- **Test Samples:** 4,127  
+- **Training Samples:** 16,503  
+- **Total Features:** 25 (9 original + 13 engineered + 4 one-hot encoded)  
+- Evaluated against multiple regression algorithms (Linear Regression, Random Forest, XGBoost)
 
 ---
 
@@ -84,4 +101,25 @@ streamlit run app.py
 
 ## 🤝 Contributions
 
-This project is open for feedback, improvement, and collaboration. 
+This project is open for feedback, improvement, and collaboration.
+
+---
+
+## 📚 Dataset
+
+- **Source:** California Housing Dataset (1990 Census Data)
+- **Records:** 20,640 housing districts
+- **Original Features:** 10 (9 numerical, 1 categorical)
+- **Processed Features:** 25 (after feature engineering and encoding)
+
+---
+
+## 📝 Project Workflow
+
+1. **EDA** (`01_eda.ipynb`) - Exploratory data analysis, correlation analysis, outlier detection
+2. **Preprocessing** (`02_preprocessing.ipynb`) - Data cleaning, feature engineering, encoding
+3. **Modeling** (`03_modeling.ipynb`) - Model training, hyperparameter tuning with GridSearchCV
+4. **Evaluation** (`04_evaluation.ipynb`) - Model evaluation, feature importance, error analysis
+5. **Deployment** (`app/app.py`) - Streamlit web application for predictions
+
+---

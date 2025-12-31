@@ -2,9 +2,17 @@ import streamlit as st
 import joblib
 import numpy as np
 import datetime
+import os
+
+# Get the directory where this script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Path to model relative to script location
+model_path = os.path.join(script_dir, "..", "models", "xgboost_model.pkl")
+# Normalize the path to handle .. correctly
+model_path = os.path.normpath(model_path)
 
 # Load trained model
-model = joblib.load("xgboost_model.pkl")
+model = joblib.load(model_path)
 
 # Title & Header
 st.set_page_config(page_title="House Price Predictor", layout="centered")
@@ -24,27 +32,73 @@ col1, col2 = st.columns(2)
 
 with col1:
     longitude = st.number_input("Longitude", min_value=-125.0, max_value=-113.0, value=-118.0, step=0.01)
+    latitude = st.number_input("Latitude", min_value=32.0, max_value=42.0, value=34.2, step=0.01)
     housing_median_age = st.number_input("Median Age of House", min_value=1, max_value=100, value=30)
     total_rooms = st.number_input("Total Rooms", min_value=1, max_value=10000, value=5000)
-    population = st.number_input("Population in Area", min_value=1, max_value=50000, value=1500)
-    ocean_proximity_inland = st.radio("Is it INLAND?", [0, 1], index=1)
+    total_bedrooms = st.number_input("Total Bedrooms", min_value=1, max_value=5000, value=1000)
 
 with col2:
-    latitude = st.number_input("Latitude", min_value=32.0, max_value=42.0, value=34.2, step=0.01)
-    total_bedrooms = st.number_input("Total Bedrooms", min_value=1, max_value=5000, value=1000)
+    population = st.number_input("Population in Area", min_value=1, max_value=50000, value=1500)
     households = st.number_input("Number of Households", min_value=1, max_value=10000, value=500)
     median_income = st.number_input("Median Income (1 = $1,000)", min_value=0.0, max_value=20.0, value=4.5, step=0.1)
-    rooms_per_household = st.number_input("Rooms per Household", min_value=0.0, max_value=50.0, value=10.0, step=0.1)
+    ocean_proximity = st.selectbox("Ocean Proximity", 
+                                   ["INLAND", "NEAR BAY", "NEAR OCEAN", "ISLAND", "<1H OCEAN"],
+                                   index=0)
 
-ocean_proximity_near_bay = st.checkbox("Is it NEAR BAY?")
-ocean_proximity_near_ocean = st.checkbox("Is it NEAR OCEAN?")
+# Calculate all engineered features (same as preprocessing pipeline)
+# Avoid division by zero
+safe_divide = lambda a, b: a / b if b != 0 else 0
 
-# Prepare input for model
+# Basic engineered features
+rooms_per_household = safe_divide(total_rooms, households)
+bedrooms_per_room = safe_divide(total_bedrooms, total_rooms)
+population_per_household = safe_divide(population, households)
+
+# Advanced engineered features
+distance_to_center = np.sqrt((longitude - (-118.0))**2 + (latitude - 36.0)**2)
+income_per_room = safe_divide(median_income, total_rooms)
+income_per_person = safe_divide(median_income, population)
+household_density = safe_divide(households, population)
+age_squared = housing_median_age ** 2
+age_log = np.log1p(housing_median_age)
+bedroom_ratio = safe_divide(total_bedrooms, households)
+income_times_rooms = median_income * rooms_per_household
+income_times_age = median_income * housing_median_age
+lat_times_lon = latitude * longitude
+
+# One-hot encode ocean_proximity (drop_first means <1H OCEAN is reference = all zeros)
+ocean_proximity_INLAND = 1 if ocean_proximity == "INLAND" else 0
+ocean_proximity_ISLAND = 1 if ocean_proximity == "ISLAND" else 0
+ocean_proximity_NEAR_BAY = 1 if ocean_proximity == "NEAR BAY" else 0
+ocean_proximity_NEAR_OCEAN = 1 if ocean_proximity == "NEAR OCEAN" else 0
+
+# Prepare input for model - MUST match exact order of 25 features from preprocessing
 user_data = np.array([[
-    longitude, latitude, housing_median_age, total_rooms,
-    total_bedrooms, population, households, median_income,
-    ocean_proximity_inland, int(ocean_proximity_near_bay),
-    int(ocean_proximity_near_ocean), rooms_per_household
+    longitude,                          # 1
+    latitude,                           # 2
+    housing_median_age,                 # 3
+    total_rooms,                        # 4
+    total_bedrooms,                     # 5
+    population,                         # 6
+    households,                         # 7
+    median_income,                      # 8
+    rooms_per_household,                # 9
+    bedrooms_per_room,                  # 10
+    population_per_household,           # 11
+    distance_to_center,                 # 12
+    income_per_room,                    # 13
+    income_per_person,                  # 14
+    household_density,                  # 15
+    age_squared,                        # 16
+    age_log,                            # 17
+    bedroom_ratio,                      # 18
+    income_times_rooms,                 # 19
+    income_times_age,                   # 20
+    lat_times_lon,                      # 21
+    ocean_proximity_INLAND,             # 22
+    ocean_proximity_ISLAND,             # 23
+    ocean_proximity_NEAR_BAY,           # 24
+    ocean_proximity_NEAR_OCEAN          # 25
 ]])
 
 # Store prediction history
