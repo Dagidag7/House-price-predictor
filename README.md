@@ -102,24 +102,3 @@ streamlit run app.py
 ## 🤝 Contributions
 
 This project is open for feedback, improvement, and collaboration.
-
----
-
-## 📚 Dataset
-
-- **Source:** California Housing Dataset (1990 Census Data)
-- **Records:** 20,640 housing districts
-- **Original Features:** 10 (9 numerical, 1 categorical)
-- **Processed Features:** 25 (after feature engineering and encoding)
-
----
-
-## 📝 Project Workflow
-
-1. **EDA** (`01_eda.ipynb`) - Exploratory data analysis, correlation analysis, outlier detection
-2. **Preprocessing** (`02_preprocessing.ipynb`) - Data cleaning, feature engineering, encoding
-3. **Modeling** (`03_modeling.ipynb`) - Model training, hyperparameter tuning with GridSearchCV
-4. **Evaluation** (`04_evaluation.ipynb`) - Model evaluation, feature importance, error analysis
-5. **Deployment** (`app/app.py`) - Streamlit web application for predictions
-
----
