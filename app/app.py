@@ -59,12 +59,10 @@ distance_to_center = np.sqrt((longitude - (-118.0))**2 + (latitude - 36.0)**2)
 income_per_room = safe_divide(median_income, total_rooms)
 income_per_person = safe_divide(median_income, population)
 household_density = safe_divide(households, population)
-age_squared = housing_median_age ** 2
 age_log = np.log1p(housing_median_age)
 bedroom_ratio = safe_divide(total_bedrooms, households)
 income_times_rooms = median_income * rooms_per_household
 income_times_age = median_income * housing_median_age
-lat_times_lon = latitude * longitude
 
 # One-hot encode ocean_proximity (drop_first means <1H OCEAN is reference = all zeros)
 ocean_proximity_INLAND = 1 if ocean_proximity == "INLAND" else 0
@@ -72,7 +70,8 @@ ocean_proximity_ISLAND = 1 if ocean_proximity == "ISLAND" else 0
 ocean_proximity_NEAR_BAY = 1 if ocean_proximity == "NEAR BAY" else 0
 ocean_proximity_NEAR_OCEAN = 1 if ocean_proximity == "NEAR OCEAN" else 0
 
-# Prepare input for model - MUST match exact order of 25 features from preprocessing
+# Prepare input for model - MUST match exact order of 22 features after feature selection
+# Features removed: households, age_squared, lat_times_lon (correlation-based removal)
 user_data = np.array([[
     longitude,                          # 1
     latitude,                           # 2
@@ -80,25 +79,22 @@ user_data = np.array([[
     total_rooms,                        # 4
     total_bedrooms,                     # 5
     population,                         # 6
-    households,                         # 7
-    median_income,                      # 8
-    rooms_per_household,                # 9
-    bedrooms_per_room,                  # 10
-    population_per_household,           # 11
-    distance_to_center,                 # 12
-    income_per_room,                    # 13
-    income_per_person,                  # 14
-    household_density,                  # 15
-    age_squared,                        # 16
-    age_log,                            # 17
-    bedroom_ratio,                      # 18
-    income_times_rooms,                 # 19
-    income_times_age,                   # 20
-    lat_times_lon,                      # 21
-    ocean_proximity_INLAND,             # 22
-    ocean_proximity_ISLAND,             # 23
-    ocean_proximity_NEAR_BAY,           # 24
-    ocean_proximity_NEAR_OCEAN          # 25
+    median_income,                      # 7
+    rooms_per_household,                # 8
+    bedrooms_per_room,                  # 9
+    population_per_household,           # 10
+    distance_to_center,                 # 11
+    income_per_room,                    # 12
+    income_per_person,                  # 13
+    household_density,                  # 14
+    age_log,                            # 15
+    bedroom_ratio,                      # 16
+    income_times_rooms,                 # 17
+    income_times_age,                   # 18
+    ocean_proximity_INLAND,             # 19
+    ocean_proximity_ISLAND,             # 20
+    ocean_proximity_NEAR_BAY,           # 21
+    ocean_proximity_NEAR_OCEAN          # 22
 ]])
 
 # Store prediction history
